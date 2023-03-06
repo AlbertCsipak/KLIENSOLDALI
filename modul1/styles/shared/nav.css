@@ -1,5 +1,6 @@
 .header{
     width: 100vw;
+    margin-bottom: 10vh;
 }
 .nav {
     height: 10vh;
@@ -19,9 +20,10 @@
     font-size: 22px;
     background-color: #219ebc;
     border-radius: 5px;
-    height: 5vh;
+    height: 7.5vh;
     width: 10vw;
     margin: 1vw;
+    flex-direction: row;
 }
 
 .nav a:hover {
@@ -33,4 +35,18 @@
     scale: 1;
     background-color: #023047;
     box-shadow: inset;
+}
+
+@media (max-width: 600px){
+    .header{
+        margin-bottom: 50vh;
+    }
+    .nav {
+        height: 40vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .nav a{
+        width: 40vw;
+    }
 }
