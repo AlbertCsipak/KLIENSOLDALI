@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="./styles/style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" 
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <title>To Do</title>
+</head>
+<body>
+    <form class="mainForm">
+        <p>To Do</p>
+        <input type="text" id="task">
+        <p>Priority</p>
+        <select name="prio" id="prio">
+            <option value="1">1</option>
+            <option value="2" selected="selected">2</option>
+            <option value="3">3</option>
+            <option value="3">4</option>
+        </select>
+        <p>Category</p>
+        <select name="category" id="category">
+            <option value="0" selected="selected"></option>
+            <option value="to buy">To Buy</option>
+            <option value="school">School</option>
+            <option value="work">Work</option>
+        </select>
+        <p>Icon</p>
+        <input type="text" id="icon">
+
+        <button id="sendButton">Submit</button>
+        
+    </form>
+
+
+    <div class="todo-wrapper">
+        <div class="to-buy-wrapper wrapperStyleMain">To Buy</div>
+        <div class="work-wrapper wrapperStyleMain">Work</div>
+        <div class="school-wrapper wrapperStyleMain">School</div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
