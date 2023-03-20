@@ -63,7 +63,7 @@ function addElement(element){
 function clickHandler(event) {
     event.preventDefault();
     let todoTmp = new todoItem(categoryInput.value,prioInput.value,taskInput.value,iconInput.value);
-    if (categoryInput.value != "" && taskInput.value != ""){
+    if (categoryInput.value != "" && taskInput.value != "" && taskInput.value.length > 2 ){
         todoList.push(todoTmp);
         addElement(todoTmp);
     }
