@@ -1,0 +1,11 @@
+body {
+    padding: 5vw;
+    
+}
+
+nav{
+    position: sticky;
+    top: 0;
+    background:white;
+    z-index: 100000;
+}
