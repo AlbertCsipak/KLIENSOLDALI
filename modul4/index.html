@@ -4,189 +4,309 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="style.css">
 
-    <title>Vue TO DO manager</title>
-    
-    <style>
-        body { padding: 40px; padding-left: 60px; }
-    </style>
+    <title>Workshop4</title>
+
 </head>
 <body>
     <div id="app">
 
         <h1>
-            TODOS: 
-            <span class="badge" :class="todoCounterColor">
-                {{ todoCounter }}
-            </span>
+            Students
         </h1>
+
+        <div id="update-wrapper">
+            <h2>
+                Update
+            </h2>
     
-        <hr>
-
-        <todo-item
-            v-for="todo in todos"
-            
-            v-bind:id="todo.id"
-            v-bind:text="todo.text"
-            v-bind:type="todo.type"
-            v-bind:tags="todo.tags"
-            v-bind:key="todo.id"
-        >
-        </todo-item>
-
-
-        <!-- <div v-for="todo in todos">
-            <div
-                class="alert alert-dismissible fade show"
-                role="alert"
-                v-bind:class="todo.type"
+            <input
+            v-model="newStudent.name"
+            type="text"
+            placeholder="name"
+            class="form-control mb-3"
             >
-                {{ todo.id }}
-                <br>                    
-                {{ todo.text }}
-                <div>
-                    <template v-for="tag in todo.tags">
-                        <span class="badge badge-secondary mr-2">
-                            {{ tagToUpper(tag) }}
-                        </span>
-                    </template>
-                </div>
-
-                <button
-                    type="button"
-                    class="close"
-                    data-dismiss="alert"
-                    aria-label="Close"
-                    @click="deleteToDo(todo.id)"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </div> -->
-
-        <input
-            v-model="newTodo.text"
+            <input
+            v-model="newStudent.isActive"
             type="text"
-            placeholder="Text of the To Do item"
+            placeholder="true/false"
             class="form-control mb-3"
+            >
+            <input
+            v-model="newStudent.birthYear"
+            type="text"
+            placeholder="birthYear"
+            class="form-control mb-3"
+            >
+            <input
+            v-model="newStudent.connections"
+            type="text"
+            placeholder="connections"
+            class="form-control mb-3"
+            >
+            <input
+            v-model="newStudent.activeSemesterCount"
+            type="text"
+            placeholder="activeSemester"
+            class="form-control mb-3"
+            >
+            <input
+            v-model="newStudent.completedCredits"
+            type="text"
+            placeholder="activeSemester"
+            class="form-control mb-3"
+            >
+            <input
+            v-model="newStudent.image"
+            type="text"
+            placeholder="image"
+            class="form-control mb-3"
+            >
+
+
+            <button
+            class="btn btn-danger btn-block"
+            v-on:click="updateStudent()"
         >
-
-        <div class="form-group">
-            <select v-model="newTodo.type" class="form-control">
-                <option disabled>Please select one</option>
-                <option v-for="type in todoTypes" :value="type.value">
-                    {{ type.text }}
-                </option>
-            </select>
+            Update Student
+        </button>
         </div>
-
-        <div class="form-group">
-            <select multiple v-model="newTodo.tags" class="form-control">
-                <option disabled>Please select one</option>
-                <option v-for="tag in tagOptions">
-                    {{ tag }}
-                </option>
-            </select>
-        </div>
-
-        <button
+    
+        <div id="create-wrapper">
+            <h2>Create</h2>
+            <input
+            v-model="newStudentJson"
+            type="text"
+            placeholder="json"
+            class="form-control mb-3"
+            >
+            <button
             class="btn btn-success btn-block"
-            v-on:click="addNewTodo"
+            v-on:click="addNewStudent()"
         >
-            Add To Do item
+            Add new Student
         </button>
+        </div>
 
-        <hr class="my-5">
 
-        <input
-            v-model="newTag"
-            type="text"
-            placeholder="Content of the tag"
-            class="form-control mb-3"
-        >
 
-        <button
-            class="btn btn-primary btn-block"
-            v-on:click="addNewTag"
-        >
-            Add new tag
-        </button>
+        <table class="table mx-3">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Picture</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">isActive</th>
+                    <th scope="col">birthYear</th>
+                    <th scope="col">connections</th>
+                    <th scope="col">completedCredits</th>
+                    <th scope="col">activeSemesterCount</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template v-for="student in students">
+                    <tr class="mb-5 student-li">
+                        <th scope="row">1</th>
+                        <td><img v-bind:src="student.image" class="border profile-picture" :class=isActiveImg(student)></td>
+                        <td :class=isActiveText(student)>
+                            {{ student.name }}
+                        </td>
+                        <td>
+                            {{ student.isActive }}
+                        </td>
+                        <td>
+                            {{ student.birthYear }}
+                        </td>
+                        <td>
+                            {{ student.connections }}
+                        </td>
+                        <td>
+                            {{ student.completedCredits }}
+                        </td>
+                        <td>
+                            {{ student.activeSemesterCount }}
+                        </td>
+                        <td>
+                            <button
+                            class="btn btn-danger btn-block"
+                            v-on:click="deleteStudent(student.id)"
+                        >
+                            Delete
+                        </button>
+                        </td>
+
+                    </tr>
+                </template>
+            </tbody>
+        </table>
 
     </div>
 
     <script type="module">
-
-        import TodoItem from './todo-item.js'
+        //import StudentItem from './student-item.js'
 
         const { createApp } = Vue
 
         createApp({
             components: {
-                TodoItem
+                //StudentItem
             },
             data() {
                 return {
-                    todos: [],
-                    newTag: '',
-                    newTodo: {
+                    students: [],
+
+
+
+                    newStudentJson: '',
+
+
+
+                    newStudent: {
                         id: '',
-                        text: '',
-                        type: 'Please select one',
-                        tags: []
-                    },
-                    todoTypes: [
-                        { text: 'primary', value: 'alert-primary' },
-                        { text: 'danger', value: 'alert-danger' },
-                        { text: 'warning', value: 'alert-warning' },
-                        { text: 'success', value: 'alert-success' }
-                    ],
-                    tagOptions: ['new', 'urgent', 'pending', 'personal', 'work']
+                        name: '',
+                        isActive: false,
+                        birthYear: '',
+                        connections: '',
+                        completedCredits: '',
+                        activeSemesterCount: '',
+                        image: ''
+                    }
                 }
             },
             computed: {
-                todoCounter() {
-                    return this.todos.length
-                },
-                todoCounterColor() {
-                    if(this.todos.length > 10)
-                        return 'badge-danger'
-                    else if(this.todos.length > 5)
-                        return 'badge-warning'
-                    else
-                        return 'badge-success'
-                }
+
             },
             methods: {
                 async fetchData() {
-                    const url = 'https://gist.githubusercontent.com/siposm/86860e30a000a5dca4b0855f7644bcf2/raw/39c5c3947ee5469532bd7d6ddea6b54e58acd3c0/todos.json'
-                    this.todos = (await (await fetch(url)).json()).todos
+                    const url = 'https://practiceapi.nikprog.hu/Student'
+                    this.students = (await (await fetch(url)).json())
                     
-                    console.log(this.todos)
+                    console.log(this.students)
                 },
-                tagToUpper(tag) {
-                    return tag.toUpperCase()
+
+
+
+
+                addNewStudent() {
+                    fetch("https://practiceapi.nikprog.hu/Student", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: this.newStudentJson,
+                    })
+                    .then((response) => response.json())
+                    
+                    .then((data) => {
+                        console.log("Success:", data)
+
+                        this.newStudent= {
+                        id: data.id,
+                        name: data.name,
+                        isActive: data.isActive,
+                        birthYear: data.birthYear,
+                        connections: data.connections,
+                        completedCredits: data.completedCredits,
+                        activeSemesterCount: data.activeSemesterCount,
+                        image: data.image
+                        }
+
+                        this.students.push(this.newStudent)
+
+                        this.newStudent= {
+                        id: '',
+                        name: '',
+                        isActive: false,
+                        birthYear: '',
+                        connections: '',
+                        completedCredits: '',
+                        activeSemesterCount: '',
+                        image: ''
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error)
+                    })
                 },
-                deleteToDo(todoId) {
-                    let index = this.todos.findIndex(x => x.id === todoId)
-                    this.todos.splice(index, 1)
+
+
+
+                deleteStudent(studentId) {
+                let index = this.students.findIndex(x => x.id === studentId)
+                this.students.splice(index, 1)
+                fetch("https://practiceapi.nikprog.hu/Student/" + studentId, {
+                    method: "DELETE",
+                })
                 },
-                addNewTodo() {
-                    this.newTodo.id = Math.floor(Math.random() * Date.now())
-                    this.todos.push(this.newTodo)
-                    this.newTodo = {
-                        text: '',
-                        type: 'Please select one',
-                        tags: []
+
+                updateStudent () {
+
+                let index = this.students.findIndex(x => x.name == this.newStudent.name)
+                this.newStudent.id = this.students[index].id
+                this.students[index] = this.newStudent
+                console.log(JSON.stringify(this.newStudent))
+                fetch("https://practiceapi.nikprog.hu/Student", {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(this.newStudent),
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log("Success:", data)
+
+                        this.newStudent= {
+                        id: '',
+                        name: '',
+                        isActive: false,
+                        birthYear: '',
+                        connections: '',
+                        completedCredits: '',
+                        activeSemesterCount: '',
+                        image: ''
                     }
-                    // backend API call should be here
+                        console.log("STUDENTS:",this.students)
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error)
+                        this.newStudent= {
+                        id: '',
+                        name: '',
+                        isActive: false,
+                        birthYear: '',
+                        connections: '',
+                        completedCredits: '',
+                        activeSemesterCount: '',
+                        image: ''}
+                    })
                 },
-                addNewTag() {
-                    this.tagOptions.push(this.newTag)
-                    this.newTag = ''
-                    // backend API call should be here
-                }
+
+                isActiveImg(stud)
+                {
+                    if (stud.isActive){
+                        return 'border-success border-3'    
+                    }
+                    else
+                    {
+                        return 'border-danger border-3'
+                    }
+                },
+                isActiveText(stud)
+                {
+                    if (stud.isActive){
+                        return 'text-success'    
+                    }
+                    else
+                    {
+                        return 'text-danger'
+                    }
+                },
+
             },
             created() {
                 this.fetchData()
